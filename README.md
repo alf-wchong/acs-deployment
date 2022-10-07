@@ -1,3 +1,5 @@
+This branch put on ice as it triggered [OSPEXP-1755](https://github.com/Alfresco/acs-deployment/compare/OPSEXP-1766?expand=1)
+
 # Alfresco Content Services Containerized Deployment
 
 [![verify](https://github.com/Alfresco/acs-deployment/actions/workflows/verify.yml/badge.svg)](https://github.com/Alfresco/acs-deployment/actions/workflows/verify.yml)
