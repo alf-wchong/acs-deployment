@@ -1,0 +1,135 @@
+# This is a YAML-formatted file.  Declare variables to be passed into your templates.
+
+externalPort: 443
+externalProtocol: https
+externalHost: acs.eksalfos.duckdns.org
+persistence:
+  enabled: true
+  storageClass:
+    enabled: true
+    name: nfs-client
+
+global:
+  alfrescoRegistryPullSecrets: quay-registry-secret
+  elasticsearch:
+    host: vpc-osalf-eks-tkj56w5b3equuau63edqqh3h3a.us-east-2.es.amazonaws.com
+    port: 443
+    protocol: https
+    user: alfresco
+    password: 0penSearch!
+  tracking:
+    auth: secret
+    sharedsecret: 50m3S3cretTh4t!s5tr0n6
+
+elasticsearch:
+  protocol: https
+repository:
+  image:
+    repository: quay.io/alfresco/alfresco-content-repository-aws
+    tag: 7.2.0.2
+  environment:
+    JAVA_OPTS: "
+      -Dalfresco.cluster.enabled=true
+      -Ddeployment.method=HELM_CHART
+      -Dtransform.service.enabled=true
+      -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80
+      -Dencryption.keystore.type=JCEKS
+      -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding
+      -Dencryption.keyAlgorithm=DESede
+      -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore
+      -Dmetadata-keystore.aliases=metadata
+      -Dmetadata-keystore.metadata.algorithm=DESede
+      -Dindex.subsystem.name=elasticsearch
+      -Dencryption.ssl.truststore.location=/usr/local/tomcat/alf_data/wm-truststore/truststore.pkcs12
+      -Dssl-truststore.password=sph3re
+      -Dencryption.ssl.truststore.type=PKCS12
+      -Delasticsearch.host=vpc-osalf-eks-tkj56w5b3equuau63edqqh3h3a.us-east-2.es.amazonaws.com
+      -Delasticsearch.port=443
+      -Delasticsearch.secureComms=https
+      -Delasticsearch.indexName=alfresco
+      -Delasticsearch.user=alfresco
+      -Delasticsearch.password=0penSearch!            
+      "
+s3connector:
+  enabled: true
+  config:
+    bucketName: osalf-bucket
+    bucketLocation: us-east-1
+
+postgresql:
+  enabled: false
+
+postgresql-syncservice:
+  enabled: false
+
+database:
+  external: true
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://osalfeks-cluster.cluster-cawjrghb3gqh.us-east-2.rds.amazonaws.com:5432/
+  user: alfresco
+  password: alfresco
+
+activemq:
+  enabled: false
+messageBroker: &acs_messageBroker
+  url: ssl://b-a5da5b49-24e8-47c0-ab10-462ecf5b87d2-1.mq.us-east-2.amazonaws.com:61617
+  user: alfresco
+  password: alfresc0password
+
+alfresco-search:
+  enabled: false
+  searchServicesImage:
+    tag: 2.0.3
+
+alfresco-elasticsearch-connector:
+  enabled: true
+  reindexing:
+    enabled: true
+    postgresql:
+      url: jdbc:postgresql://osalfeks-cluster.cluster-cawjrghb3gqh.us-east-2.rds.amazonaws.com:5432/
+      hostname:
+      database: alfresco
+  elasticsearch:
+    host: vpc-osalf-eks-tkj56w5b3equuau63edqqh3h3a.us-east-2.es.amazonaws.com
+    port: 443
+    protocol: https      
+transformrouter:
+  image:
+    tag: 1.5.3
+
+pdfrenderer:
+  image:
+    tag: 2.5.7
+
+imagemagick:
+  image:
+    tag: 2.5.7
+
+libreoffice:
+  image:
+    tag: 2.5.7
+
+tika:
+  image:
+    tag: 2.5.7
+
+transformmisc:
+  image:
+    tag: 2.5.7
+
+aiTransformer:
+  image:
+    tag: 1.4.2
+
+filestore:
+  image:
+    tag: 0.16.1
+
+share:
+  image:
+    tag: 7.2.0.2
+
+alfresco-sync-service:
+  syncservice:
+    image:
+      tag: 3.7.0
