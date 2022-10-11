@@ -9,11 +9,11 @@ This relies on 2 steps:
 
 ## Create a kubernetes secret to store the license
 
-Make sure your license available is readable and you have appropriate kubernetes access in order to create a secret in the ACS namespace where you want to deploy the helm release.
+Make sure your license available is readable and you have appropriate kubernetes access in order to create a secret in the ACS namespace where you want to deploy the helm release. On EKS 1.22, the base64 encoded license data cannot have newlines. Use the [**-w 0** option for base64](https://unix.stackexchange.com/questions/569570/encode-file-content-and-echo-it-as-one-line) to eliminate newlines.
 
 ```bash
 ACS_NAMESPACE=acs
-LIC64=$(base64 < ~/Downloads/Alfresco-ent72-foobar.lic)
+LIC64=$(base64 -w 0 < ~/Downloads/Alfresco-ent72-foobar.lic)
 cat <<EOF | kubectl -n $ACS_NAMESPACE apply -f -
 apiVersion: v1
 kind: Secret
