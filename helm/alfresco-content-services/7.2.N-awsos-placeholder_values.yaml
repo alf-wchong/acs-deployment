@@ -1,0 +1,106 @@
+# This is a YAML-formatted file.  Declare variables to be passed into your templates.
+
+externalPort: 443
+externalProtocol: https
+externalHost: acs.eksalfos.duckdns.org
+
+persistence:
+  enabled: true
+  storageClass:
+    enabled: true
+    name: nfs-client
+
+global:
+  alfrescoRegistryPullSecrets: orealfos-registry-secrets
+  elasticsearch:
+    host: vpc-orealfos-dxb3me5op6elpubsx5gac3nqai.us-west-2.es.amazonaws.com
+    port: 443
+    protocol: https
+    user: alfresco
+    password: Alfr3sc@
+
+repository:
+  image:
+    repository: alfresco-content-repository-aws [CheckforTrustStore thing]
+    tag: 7.2.1
+  licenseSecret: acslicense
+
+s3connector:
+  enabled: true
+  config:
+    bucketName: orealfos
+    bucketLocation: us-west-2
+
+pdfrenderer:
+  image:
+    tag: 2.5.7
+
+imagemagick:
+  image:
+    tag: 2.5.7
+
+libreoffice:
+  image:
+    tag: 2.5.7
+
+tika:
+  image:
+    tag: 2.5.7
+
+transformmisc:
+  image:
+    tag: 2.5.7
+
+aiTransformer:
+  image:
+    tag: 1.4.2
+
+filestore:
+  image:
+    tag: 0.16.1
+
+alfresco-search:
+  enabled: false
+  searchServicesImage:
+    tag: 2.0.4
+
+alfresco-elasticsearch-connector:
+  enabled: true
+  
+share:
+  image:
+    tag: 7.2.1
+
+postgresql:
+  enabled: false
+  image:
+    tag: 13.3.0
+
+postgresql-syncservice:
+  enabled: false
+  image:
+    tag: 13.3.0
+
+database:
+  external: true
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://orealfos-cluster.cluster-cdwmz9iuh1uw.us-west-2.rds.amazonaws.com:5432/
+  user: alfresco
+  password: alfresco
+
+activemq:
+  enabled: false  
+
+alfresco-sync-service:
+  syncservice:
+    image:
+      tag: 3.7.3-A1
+  messageBroker:
+    url: ssl://b-ced50fbf-11ca-4c83-a995-9391526a5c58-1.mq.us-west-2.amazonaws.com:61617
+    user: alfresco
+    password: Alfr3sc@
+
+messageBroker: &acs_messageBroker
+  url: ssl://b-ced50fbf-11ca-4c83-a995-9391526a5c58-1.mq.us-west-2.amazonaws.com:61617
+  user: alfresco
+  password: Alfr3sc@  
