@@ -20,6 +20,7 @@ global:
     password: Alfr3sc@
 
 repository:
+  replicaCount: 1
   image:
     #repository: quay.io/alfresco/alfresco-content-repository-aws
     repository: 817632472177.dkr.ecr.us-west-2.amazonaws.com/orealfos/alfresco/alfresco-content-repository-aws-os
@@ -27,9 +28,6 @@ repository:
   licenseSecret: acslicense
   environment:
     JAVA_OPTS: >-
-      -Dtransform.service.enabled=true
-      -Dlocal.transform.service.enabled=true
-      -Dlegacy.transform.service.enabled=false
       -XX:MinRAMPercentage=50
       -XX:MaxRAMPercentage=80
       -Dencryption.keystore.type=JCEKS
@@ -42,6 +40,8 @@ repository:
       -Dencryption.ssl.truststore.type=PKCS12
       -Dssl-truststore.password=sph3re
 
+transformrouter:
+  replicaCount: 1
 s3connector:
   enabled: true
   config:
@@ -49,26 +49,33 @@ s3connector:
     bucketLocation: us-west-2
 
 pdfrenderer:
+  replicaCount: 1
   image:
     tag: 2.5.7
 
 imagemagick:
+  replicaCount: 1
   image:
     tag: 2.5.7
 
 libreoffice:
+  replicaCount: 1
   image:
     tag: 2.5.7
 
 tika:
+  replicaCount: 1
   image:
     tag: 2.5.7
 
+
 transformmisc:
+  replicaCount: 1
   image:
     tag: 2.5.7
 
 aiTransformer:
+  replicaCount: 1
   image:
     tag: 1.4.2
 
