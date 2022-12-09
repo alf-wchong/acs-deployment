@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: FGAlfresco Rt53
+Parameters:
+  ALBDNSName:
+    Type: String
+    Default: "k8s-alfresco-acsalfre-c958601dc9-221332038.ap-southeast-2.elb.amazonaws.com"
+  ALBIngressCanonicalId:
+    Type: String
+    Default: "Z1GM3OXH4ZPM65"
+  DomainName:
+    Type: String
+    Default: "sydfealf.duckdns.org"
+    AllowedPattern: ^(?!\s*$).+
+
+Resources:
+  DNS: 
+    Type: "AWS::Route53::HostedZone"
+    Properties:
+      Name: !Ref DomainName
+      HostedZoneConfig:
+        Comment: !Join
+          - " "
+          - ["My hosted zone for", !Ref DomainName]
+  AlfrescoRecord:
+    Type: "AWS::Route53::RecordSet"
+    DependsOn: DNS
+    Properties:
+      Name: !Join
+        - '.'
+        - ['acs', !Ref DomainName]
+      Type: A
+      HostedZoneId: !Ref DNS
+      AliasTarget:
+        DNSName: !Ref ALBDNSName
+        HostedZoneId: !Ref ALBIngressCanonicalId
+        EvaluateTargetHealth: True

@@ -1,0 +1,199 @@
+# This is a YAML-formatted file.  Declare variables to be passed into your templates.
+
+externalPort: 443
+externalProtocol: https
+externalHost: acs.sydfealf.duckdns.org
+
+persistence:
+  enabled: true
+  storageClass:
+    enabled: true
+    name: efs-sc
+    accessModes:
+      - ReadWriteMany
+
+global:
+  alfrescoRegistryPullSecrets: docker-registry-secrets 
+  elasticsearch:
+    host: vpc-syd1-acs-opensearch-ivvqhoac42n47xs5eqhwsc77bm.ap-southeast-2.es.amazonaws.com
+    port: 443
+    protocol: https
+    user: alfresco
+    password: Th-sIs1t
+
+repository:
+  replicaCount: 1
+  image:
+    repository: 817632472177.dkr.ecr.ap-southeast-2.amazonaws.com/chongwm/alfresco-content-repository-ts
+    tag: 7.2.1
+  licenseSecret: acslicense
+  environment:
+    JAVA_OPTS: >-
+      -XX:MinRAMPercentage=50
+      -XX:MaxRAMPercentage=80
+      -Dencryption.keystore.type=JCEKS
+      -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding
+      -Dencryption.keyAlgorithm=DESede
+      -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore
+      -Dmetadata-keystore.aliases=metadata
+      -Dmetadata-keystore.metadata.algorithm=DESede
+      -Dencryption.ssl.truststore.location=/usr/local/tomcat/truststore.pkcs12
+      -Dencryption.ssl.truststore.type=PKCS12
+      -Dssl-truststore.password=sph3re
+  startupProbe:
+    periodSeconds: 180
+    failureThreshold: 10
+  readinessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 180
+    timeoutSeconds: 10
+    failureThreshold: 6
+  livenessProbe:
+    initialDelaySeconds: 130
+    periodSeconds: 180
+    timeoutSeconds: 10
+
+
+ooiService:
+  replicaCount: 1
+msTeamsService:
+  replicaCount: 1
+
+transformrouter:
+  replicaCount: 1
+    
+s3connector:
+  enabled: false
+  config:
+    bucketName: fealfos
+    bucketLocation: us-east-1
+
+pdfrenderer:
+  replicaCount: 1
+  image:
+    tag: 2.5.7
+  readinessProbe:
+    initialDelaySeconds: 120
+  livenessProbe:
+    initialDelaySeconds: 60
+
+imagemagick:
+  replicaCount: 1
+  image:
+    tag: 2.5.7
+  readinessProbe:
+    initialDelaySeconds: 120
+  livenessProbe:
+    initialDelaySeconds: 60
+
+libreoffice:
+  replicaCount: 1
+  image:
+    tag: 2.5.7
+  readinessProbe:
+    initialDelaySeconds: 120
+  livenessProbe:
+    initialDelaySeconds: 60
+
+tika:
+  replicaCount: 1
+  image:
+    tag: 2.5.7
+
+transformmisc:
+  replicaCount: 1
+  image:
+    tag: 2.5.7
+  readinessProbe:
+    initialDelaySeconds: 60
+  livenessProbe:
+    initialDelaySeconds: 60
+
+aiTransformer:
+  replicaCount: 1
+  image:
+    tag: 1.4.2
+  readinessProbe:
+    initialDelaySeconds: 60
+  livenessProbe:
+    initialDelaySeconds: 60
+
+filestore:
+  replicaCount: 1
+  image:
+    tag: 0.16.1
+  readinessProbe:
+    initialDelaySeconds: 60
+  livenessProbe:
+    initialDelaySeconds: 60
+
+alfresco-search:
+  enabled: false
+  searchServicesImage:
+    tag: 2.0.4
+
+alfresco-elasticsearch-connector:
+  enabled: true
+  reindexing:
+    enabled: true
+    postgresql:
+      url: jdbc:postgresql://alfrescodbv2-cluster.cluster-cgkmfsfrmoge.ap-southeast-2.rds.amazonaws.com:5432/
+share:
+  image:
+    tag: 7.2.1
+
+postgresql:
+  enabled: false
+  image:
+    tag: 13.3.0
+
+postgresql-syncservice:
+  enabled: false
+  image:
+    tag: 13.3.0
+
+database:
+  external: true
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://alfrescodbv2-cluster.cluster-cgkmfsfrmoge.ap-southeast-2.rds.amazonaws.com:5432/
+  user: alfresco
+  password: alfresco
+
+activemq:
+  enabled: false  
+
+alfresco-sync-service:
+  syncservice:
+    enabled: false
+  image:
+    tag: 3.7.3-A1
+  messageBroker:
+    url: ssl://b-741cfe18-f783-4c3e-988b-32ef5678c04e-1.mq.ap-southeast-2.amazonaws.com:61617 
+    user: alfresco
+    password: beeisnotdctm
+
+messageBroker: &acs_messageBroker
+  url: ssl://b-741cfe18-f783-4c3e-988b-32ef5678c04e-1.mq.ap-southeast-2.amazonaws.com:61617
+  user: alfresco
+  password: beeisnotdctm
+
+
+
+alfresco-digital-workspace:
+  enabled: true
+  image:
+    repository: 817632472177.dkr.ecr.ap-southeast-2.amazonaws.com/alfresco/alfresco-digital-workspace
+    tag: 2.9.0
+    pullPolicy: IfNotPresent
+  ingress: 
+  resources:
+# https://github.com/aws/amazon-cloudwatch-agent/issues/580
+# For Fargate the requests and limits MUST be the same.
+    limits:
+      cpu: 1
+      memory: 1024Mi
+    requests:
+      cpu: 1
+      memory: 1024Mi
+
+

@@ -1,0 +1,10 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  creationTimestamp: "2022-12-05T06:19:06Z"
+  generation: 1
+  name: aws-alb
+  resourceVersion: "495303"
+  uid: 0e2330f8-805c-4005-b674-5bc467c15e7b
+spec:
+  controller: ingress.k8s.aws/alb

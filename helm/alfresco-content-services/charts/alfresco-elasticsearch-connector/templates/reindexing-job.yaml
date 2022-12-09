@@ -4,6 +4,7 @@ kind: Job
 metadata:
   name: {{ include "alfresco-elasticsearch-connector.fullName" . }}-reindexing
 spec:
+  backoffLimit: 10
   template:
     metadata:
       {{- with .Values.podAnnotations }}

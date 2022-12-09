@@ -206,8 +206,8 @@ spec:
       volumes:
       {{- if .Values.repository.licenseSecret }}
       - name: acs-license
-        secret:
-          secretName: {{ .Values.repository.licenseSecret }}
+        configMap:
+          name: {{ .Values.repository.licenseSecret }}
       {{- end }}
       {{- if .Values.repository.extraLogStatements }}
       - name : dev-log4j-properties-volume
